@@ -1,4 +1,4 @@
-FROM node:18-alpine as builder
+FROM node:22-alpine as builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ ENV VITE_SERVER_URL=$VITE_SERVER_URL
 RUN yarn build
 
 # Serve stage
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
