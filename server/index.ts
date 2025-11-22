@@ -5,9 +5,17 @@ import { Client, ConnectConfig } from 'ssh2';
 import cors from 'cors';
 import { spawn } from 'child_process';
 import { Duplex } from 'stream';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
+
+// Serve static files from the client build
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -147,6 +155,11 @@ io.on('connection', (socket: Socket) => {
     }
     console.log('Client disconnected', socket.id);
   });
+});
+
+// Handle client-side routing by serving index.html for all other routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 3001;

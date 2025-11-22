@@ -25,7 +25,8 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
 
     useEffect(() => {
         // Initialize Socket.io
-        const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:50000';
+        // Use relative path for single-port setup, fall back to env var for dev
+        const serverUrl = import.meta.env.PROD ? '/' : (import.meta.env.VITE_SERVER_URL || 'http://localhost:50000');
         const socket = io(serverUrl);
         socketRef.current = socket;
 
