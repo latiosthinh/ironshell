@@ -25,7 +25,8 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
 
     useEffect(() => {
         // Initialize Socket.io
-        const socket = io('http://localhost:3001');
+        const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:50000';
+        const socket = io(serverUrl);
         socketRef.current = socket;
 
         // Initialize xterm.js

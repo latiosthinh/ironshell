@@ -44,21 +44,30 @@ IronShell is a modern web terminal designed for those who love the look and feel
     npm install
     ```
 
-### Running the App
+### Docker (Recommended)
 
-1.  **Start the Backend** (Port 3001)
+1.  **Start with Docker Compose**
+    ```bash
+    docker-compose up --build
+    ```
+
+2.  Open `http://localhost:10000`
+
+### Manual Setup
+
+1.  **Start the Backend** (Port 50000)
     ```bash
     cd server
     npm start
     ```
 
-2.  **Start the Frontend** (Port 5173)
+2.  **Start the Frontend** (Port 10000)
     ```bash
     cd client
     npm run dev
     ```
 
-3.  Open your browser to `http://localhost:5173` and connect!
+3.  Open your browser to `http://localhost:10000` and connect!
 
 ## 🛠️ Tech Stack
 

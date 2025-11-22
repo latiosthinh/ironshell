@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./server
+    ports:
+      - "50000:50000"
+    environment:
+      - PORT=50000
+    restart: always
+
+  client:
+    build:
+      context: ./client
+      args:
+        - VITE_SERVER_URL=http://localhost:50000
+    ports:
+      - "10000:10000"
+    depends_on:
+      - server
+    restart: always
