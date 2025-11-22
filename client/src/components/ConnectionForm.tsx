@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 
-const ConnectionForm = ({ onConnect }) => {
-    const [formData, setFormData] = useState({
+interface ConnectionConfig {
+    host: string;
+    port: string;
+    username: string;
+    password?: string;
+}
+
+interface ConnectionFormProps {
+    onConnect: (config: ConnectionConfig) => void;
+}
+
+const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
+    const [formData, setFormData] = useState<ConnectionConfig>({
         host: 'ssh.xueer.space', // Pre-fill for convenience
         port: '22',
         username: 'manjaro',
@@ -9,14 +20,14 @@ const ConnectionForm = ({ onConnect }) => {
     });
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
         // Simulate a small delay for effect

@@ -1,10 +1,10 @@
-const express = require('express');
-const http = require('http');
-const { Server } = require('socket.io');
-const { Client } = require('ssh2');
-const cors = require('cors');
-const { spawn } = require('child_process');
-const { Duplex } = require('stream');
+import express from 'express';
+import http from 'http';
+import { Server, Socket } from 'socket.io';
+import { Client, ConnectConfig } from 'ssh2';
+import cors from 'cors';
+import { spawn } from 'child_process';
+import { Duplex } from 'stream';
 
 const app = express();
 app.use(cors());
@@ -17,12 +17,21 @@ const io = new Server(server, {
   }
 });
 
-io.on('connection', (socket) => {
+interface SSHConnectConfig {
+  host: string;
+  port: string | number;
+  username: string;
+  password?: string;
+  rows?: number;
+  cols?: number;
+}
+
+io.on('connection', (socket: Socket) => {
   console.log('Client connected', socket.id);
 
   let sshClient = new Client();
 
-  socket.on('ssh-connect', (config) => {
+  socket.on('ssh-connect', (config: SSHConnectConfig) => {
     console.log('Attempting SSH connection to ' + config.host);
 
     // Basic validation
@@ -34,7 +43,7 @@ io.on('connection', (socket) => {
     try {
       const isCloudflare = config.host === 'ssh.xueer.space';
 
-      const connectConfig = {
+      const connectConfig: ConnectConfig = {
         username: config.username,
         password: config.password,
         readyTimeout: 60000,
@@ -61,7 +70,7 @@ io.on('connection', (socket) => {
           },
           write(chunk, encoding, callback) {
             // this stream -> cloudflared stdin
-            return cf.stdin.write(chunk, encoding, callback);
+            return cf.stdin.write(chunk, encoding as BufferEncoding, callback);
           }
         });
 
@@ -83,7 +92,7 @@ io.on('connection', (socket) => {
         connectConfig.sock = stream;
       } else {
         connectConfig.host = config.host;
-        connectConfig.port = parseInt(config.port) || 22;
+        connectConfig.port = typeof config.port === 'string' ? parseInt(config.port) : config.port || 22;
       }
 
       sshClient.on('ready', () => {
@@ -110,7 +119,7 @@ io.on('connection', (socket) => {
             }
           });
 
-          stream.on('data', (data) => {
+          stream.on('data', (data: Buffer) => {
             socket.emit('term-output', data.toString('utf-8'));
           });
 
@@ -127,7 +136,7 @@ io.on('connection', (socket) => {
         console.log('SSH Client Connection Closed');
         socket.emit('ssh-status', 'disconnected');
       }).connect(connectConfig);
-    } catch (err) {
+    } catch (err: any) {
       socket.emit('ssh-error', 'Init error: ' + err.message);
     }
   });

@@ -3,10 +3,17 @@ import ConnectionForm from './components/ConnectionForm';
 import Terminal from './components/Terminal';
 import './index.css';
 
-function App() {
-  const [connectionConfig, setConnectionConfig] = useState(null);
+interface ConnectionConfig {
+  host: string;
+  port: string;
+  username: string;
+  password?: string;
+}
 
-  const handleConnect = (config) => {
+function App() {
+  const [connectionConfig, setConnectionConfig] = useState<ConnectionConfig | null>(null);
+
+  const handleConnect = (config: ConnectionConfig) => {
     setConnectionConfig(config);
   };
 

@@ -3,13 +3,25 @@ import { Terminal as XTerm } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
 import 'xterm/css/xterm.css';
-import io from 'socket.io-client';
+import { io, Socket } from 'socket.io-client';
 
-const Terminal = ({ config, onDisconnect }) => {
-    const terminalRef = useRef(null);
-    const socketRef = useRef(null);
-    const xtermRef = useRef(null);
-    const resizeTimeoutRef = useRef(null);
+interface ConnectionConfig {
+    host: string;
+    port: string;
+    username: string;
+    password?: string;
+}
+
+interface TerminalProps {
+    config: ConnectionConfig;
+    onDisconnect: () => void;
+}
+
+const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
+    const terminalRef = useRef<HTMLDivElement>(null);
+    const socketRef = useRef<Socket | null>(null);
+    const xtermRef = useRef<XTerm | null>(null);
+    const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
         // Initialize Socket.io
@@ -56,7 +68,7 @@ const Terminal = ({ config, onDisconnect }) => {
         term.loadAddon(fitAddon);
         term.loadAddon(new WebLinksAddon());
 
-        term.open(terminalRef.current);
+        term.open(terminalRef.current as HTMLDivElement);
 
         // Handle resize with ResizeObserver
         const resizeObserver = new ResizeObserver(entries => {
@@ -91,6 +103,7 @@ const Terminal = ({ config, onDisconnect }) => {
         setTimeout(() => {
             try {
                 fitAddon.fit();
+                term.write('Welcome to IronShell\r\n');
             } catch (e) {
                 console.warn('Initial fit error:', e);
             }
@@ -106,7 +119,7 @@ const Terminal = ({ config, onDisconnect }) => {
             });
         });
 
-        socket.on('ssh-status', (status) => {
+        socket.on('ssh-status', (status: string) => {
             if (status === 'connected') {
                 term.write('\r\n*** SSH Connection Established ***\r\n');
                 term.focus();
@@ -116,11 +129,11 @@ const Terminal = ({ config, onDisconnect }) => {
             }
         });
 
-        socket.on('ssh-error', (err) => {
+        socket.on('ssh-error', (err: string) => {
             term.write(`\r\n*** SSH Error: ${err} ***\r\n`);
         });
 
-        socket.on('term-output', (data) => {
+        socket.on('term-output', (data: string) => {
             term.write(data);
         });
 
