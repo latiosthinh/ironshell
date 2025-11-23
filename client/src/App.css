@@ -58,3 +58,7 @@ body {
 .xterm-viewport {
     overflow-y: auto !important;
 }
+
+.xterm-fg-7 {
+    opacity: 0.1;
+}

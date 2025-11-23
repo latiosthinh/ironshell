@@ -21,7 +21,7 @@ function App() {
   };
 
   return (
-    <div className="w-full h-full max-h-[100svh] flex justify-center items-center lg:p-5">
+    <div className="w-full h-screen max-h-[100svh] flex justify-center items-center lg:p-5">
       {!connectionConfig ? (
         <ConnectionForm onConnect={handleConnect} />
       ) : (
