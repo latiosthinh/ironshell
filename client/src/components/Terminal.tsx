@@ -123,7 +123,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
 
         socket.on('ssh-status', (status: string) => {
             if (status === 'connected') {
-                term.write('\r\n*** SSH Connection Established ***\r\n');
+                term.write(`\r\n*** SSH Connection Established to ${config.host} ***\r\n`);
                 term.focus();
             } else if (status === 'disconnected') {
                 term.write('\r\n*** SSH Connection Closed ***\r\n');
