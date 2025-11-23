@@ -6,13 +6,16 @@
 
     --color-bg-color: #0f0f1a;
     --color-terminal-bg: #1e1e1e;
-    --color-accent-color: #646cff;
-    --color-accent-hover: #747bff;
+    --color-accent-color: #50fa7b;
+    /* Updated to green */
+    --color-accent-hover: #69ff94;
+    /* Updated to lighter green */
     --color-text-color: #f0f0f0;
     --color-glass-bg: rgba(20, 20, 35, 0.6);
-    --color-glass-border: rgba(255, 255, 255, 0.08);
+    --color-glass-border: rgba(80, 250, 123, 0.2);
+    /* Green tint border */
     --color-input-bg: rgba(0, 0, 0, 0.3);
-    --color-error-color: #ff4b4b;
+    --color-error-color: #ff5555;
 
     --animate-float-in: floatIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     --animate-fade-in: fadeIn 0.5s ease;
@@ -50,8 +53,8 @@ body {
     height: 100vh;
     width: 100vw;
     background-image:
-        radial-gradient(circle at 15% 50%, rgba(100, 108, 255, 0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(255, 100, 255, 0.08), transparent 25%);
+        radial-gradient(circle at 15% 50%, rgba(80, 250, 123, 0.05), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(80, 250, 123, 0.05), transparent 25%);
 }
 
 /* Terminal specific overrides */
@@ -74,7 +77,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #03df3a;
+    background-color: #50fa7b;
     border-radius: 4px;
     border: 2px solid transparent;
     background-clip: content-box;

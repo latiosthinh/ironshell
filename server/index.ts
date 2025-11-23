@@ -1,7 +1,9 @@
 import express from 'express';
 import http from 'http';
 import { Server, Socket } from 'socket.io';
-import { Client, ConnectConfig } from 'ssh2';
+import pkg from 'ssh2';
+const { Client } = pkg;
+import type { ConnectConfig } from 'ssh2';
 import cors from 'cors';
 import { spawn } from 'child_process';
 import { Duplex } from 'stream';

@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
 import { io, Socket } from 'socket.io-client';
+import StatusBar from './StatusBar';
 
 interface ConnectionConfig {
     host: string;
@@ -22,6 +23,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
     const socketRef = useRef<Socket | null>(null);
     const xtermRef = useRef<XTerm | null>(null);
     const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'connecting'>('connecting');
 
     useEffect(() => {
         // Initialize Socket.io
@@ -113,6 +115,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
 
         // Socket events
         socket.on('connect', () => {
+            setConnectionStatus('connected');
             term.write('\r\n*** Connected to backend ***\r\n');
             socket.emit('ssh-connect', {
                 ...config,
@@ -121,11 +124,17 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
             });
         });
 
+        socket.on('disconnect', () => {
+            setConnectionStatus('disconnected');
+        });
+
         socket.on('ssh-status', (status: string) => {
             if (status === 'connected') {
+                setConnectionStatus('connected');
                 term.write(`\r\n*** SSH Connection Established to ${config.host} ***\r\n`);
                 term.focus();
             } else if (status === 'disconnected') {
+                setConnectionStatus('disconnected');
                 term.write('\r\n*** SSH Connection Closed ***\r\n');
                 if (onDisconnect) onDisconnect();
             }
@@ -156,12 +165,17 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
     }, [config, onDisconnect]);
 
     return (
-        <div
-            data-component="terminal-container"
-            className="w-full h-full max-h-[100svh] overflow-hidden bg-[#0f0f1a] p-[15px] box-border lg:border-2 lg:border-[#50fa7b] lg:border-solid"
-        >
-            <div ref={terminalRef} className="w-full h-full max-h-[100svh] overflow-y-auto" />
-        </div>
+        <>
+            <div
+                data-component="terminal-container"
+                className="w-full h-full max-h-[100svh] overflow-hidden bg-[#0f0f1a] p-[15px] pb-0 box-border flex flex-col"
+            >
+                <div className="flex-1 w-full overflow-hidden relative">
+                    <div ref={terminalRef} className="absolute inset-0" />
+                </div>
+            </div>
+            <StatusBar host={config.host} status={connectionStatus} />
+        </>
     );
 };
 
