@@ -1,42 +1,60 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@import "tailwindcss";
+
+@theme {
+    --font-sans: 'Inter', sans-serif;
+    --font-mono: 'Fira Code', monospace;
+
+    --color-bg-color: #0f0f1a;
+    --color-terminal-bg: #1e1e1e;
+    --color-accent-color: #646cff;
+    --color-accent-hover: #747bff;
+    --color-text-color: #f0f0f0;
+    --color-glass-bg: rgba(20, 20, 35, 0.6);
+    --color-glass-border: rgba(255, 255, 255, 0.08);
+    --color-input-bg: rgba(0, 0, 0, 0.3);
+    --color-error-color: #ff4b4b;
+
+    --animate-float-in: floatIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    --animate-fade-in: fadeIn 0.5s ease;
+
+    @keyframes floatIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background-color: #0f0f1a;
+    color: #f0f0f0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    background-image:
+        radial-gradient(circle at 15% 50%, rgba(100, 108, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(255, 100, 255, 0.08), transparent 25%);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* Terminal specific overrides */
+.xterm-viewport {
+    overflow-y: auto !important;
 }

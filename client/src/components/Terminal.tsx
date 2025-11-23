@@ -157,18 +157,10 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
 
     return (
         <div
-            className="terminal-container"
-            style={{
-                width: '100%',
-                height: '100vh',
-                overflow: 'hidden',
-                background: '#0f0f1a',
-                padding: '15px',
-                boxSizing: 'border-box',
-                border: '2px solid #50fa7b'
-            }}
+            data-component="terminal-container"
+            className="w-full h-full max-h-[100svh] overflow-hidden bg-[#0f0f1a] p-[15px] box-border lg:border-2 lg:border-[#50fa7b] lg:border-solid"
         >
-            <div ref={terminalRef} style={{ width: '100%', height: '100%' }} />
+            <div ref={terminalRef} className="w-full h-full max-h-[100svh] overflow-y-auto" />
         </div>
     );
 };
