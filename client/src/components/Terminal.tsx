@@ -1,9 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
 import { io, Socket } from 'socket.io-client';
+import StatusBar from './StatusBar';
 
 interface ConnectionConfig {
     host: string;
@@ -22,10 +23,12 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
     const socketRef = useRef<Socket | null>(null);
     const xtermRef = useRef<XTerm | null>(null);
     const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'connecting'>('connecting');
 
     useEffect(() => {
         // Initialize Socket.io
-        const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:50000';
+        // Use relative path for single-port setup, fall back to env var for dev
+        const serverUrl = import.meta.env.PROD ? '/' : (import.meta.env.VITE_SERVER_URL || 'http://localhost:50000');
         const socket = io(serverUrl);
         socketRef.current = socket;
 
@@ -112,6 +115,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
 
         // Socket events
         socket.on('connect', () => {
+            setConnectionStatus('connected');
             term.write('\r\n*** Connected to backend ***\r\n');
             socket.emit('ssh-connect', {
                 ...config,
@@ -120,11 +124,17 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
             });
         });
 
+        socket.on('disconnect', () => {
+            setConnectionStatus('disconnected');
+        });
+
         socket.on('ssh-status', (status: string) => {
             if (status === 'connected') {
-                term.write('\r\n*** SSH Connection Established ***\r\n');
+                setConnectionStatus('connected');
+                term.write(`\r\n*** SSH Connection Established to ${config.host} ***\r\n`);
                 term.focus();
             } else if (status === 'disconnected') {
+                setConnectionStatus('disconnected');
                 term.write('\r\n*** SSH Connection Closed ***\r\n');
                 if (onDisconnect) onDisconnect();
             }
@@ -155,20 +165,17 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
     }, [config, onDisconnect]);
 
     return (
-        <div
-            className="terminal-container"
-            style={{
-                width: '100%',
-                height: '100vh',
-                overflow: 'hidden',
-                background: '#0f0f1a',
-                padding: '15px',
-                boxSizing: 'border-box',
-                border: '2px solid #50fa7b'
-            }}
-        >
-            <div ref={terminalRef} style={{ width: '100%', height: '100%' }} />
-        </div>
+        <>
+            <div
+                data-component="terminal-container"
+                className="w-full h-full max-h-[100svh] overflow-hidden bg-[#0f0f1a] p-[15px] pb-0 box-border flex flex-col"
+            >
+                <div className="flex-1 w-full overflow-hidden relative">
+                    <div ref={terminalRef} className="absolute inset-0" />
+                </div>
+            </div>
+            <StatusBar host={config.host} status={connectionStatus} />
+        </>
     );
 };
 

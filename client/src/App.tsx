@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ConnectionForm from './components/ConnectionForm';
 import Terminal from './components/Terminal';
-import './index.css';
 
 interface ConnectionConfig {
   host: string;
@@ -22,7 +21,7 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <div className="w-full h-screen max-h-[100svh] flex flex-col justify-center items-center">
       {!connectionConfig ? (
         <ConnectionForm onConnect={handleConnect} />
       ) : (

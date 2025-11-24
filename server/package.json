@@ -2,6 +2,7 @@
   "name": "ironshell-server",
   "version": "1.0.0",
   "description": "Backend for IronShell",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "ts-node index.ts",
