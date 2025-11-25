@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ConnectionForm from './components/ConnectionForm';
 import Terminal from './components/Terminal';
 import TabBar from './components/TabBar';
-import { v4 as uuidv4 } from 'uuid';
 import { useStore, ConnectionConfig, Session } from './store';
 
 function App() {
@@ -11,7 +10,7 @@ function App() {
 
   const handleConnect = (config: ConnectionConfig) => {
     const newSession: Session = {
-      id: uuidv4(),
+      id: crypto.randomUUID(),
       config,
       title: config.name || `${config.username}@${config.host}`,
       status: 'connecting',
