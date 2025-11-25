@@ -3,15 +3,14 @@ import { Terminal as XTerm } from '@xterm/xterm';
 import { FitAddon } from '@xterm/addon-fit';
 import { WebLinksAddon } from '@xterm/addon-web-links';
 import '@xterm/xterm/css/xterm.css';
-import { io, Socket } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import StatusBar from './StatusBar';
 import { useStore, ConnectionConfig } from '../store';
+import { socketService } from '../socket';
 
 interface TerminalProps {
     config: ConnectionConfig;
     onDisconnect: () => void;
-    isActive: boolean;
-    onDuplicate: () => void;
     sessionId: string;
 }
 
@@ -33,16 +32,8 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect, isActive, onD
     }, [connectionStatus, sessionId, updateSessionStatus]);
 
     useEffect(() => {
-        // Initialize Socket.io with reconnection limits
-        const serverUrl = import.meta.env.PROD ? '/' : (import.meta.env.VITE_SERVER_URL || 'http://localhost:50000');
-        const socket = io(serverUrl, {
-            reconnection: true,
-            reconnectionAttempts: 5,
-            reconnectionDelay: 1000,
-            reconnectionDelayMax: 5000,
-            timeout: 10000,
-            autoConnect: true,
-        });
+        // Use shared socket service instead of creating new connection
+        const socket = socketService.getSocket();
         socketRef.current = socket;
 
         // Initialize xterm.js
