@@ -1,5 +1,6 @@
 import React from 'react';
 import { useStore } from '../store';
+import StatusDot from './StatusDot';
 
 interface TabBarProps {
     onNewTab: () => void;
@@ -15,15 +16,6 @@ const TabBar: React.FC<TabBarProps> = ({
     const { sessions, activeSessionId, updateSessionTitle } = useStore();
     const [editingId, setEditingId] = React.useState<string | null>(null);
     const [editValue, setEditValue] = React.useState('');
-
-    const getStatusColor = (status: string, sessionId: string) => {
-        if (status === 'connected') {
-            return activeSessionId === sessionId ? 'bg-[#50fa7b]' : 'bg-[#2e8b57]';
-        }
-        if (status === 'connecting') return 'animate-blink-yellow-green';
-        if (status === 'lost') return 'bg-[#ff5555]';
-        return 'bg-[#6272a4]';
-    };
 
     const handleDoubleClick = (id: string, currentTitle: string) => {
         setEditingId(id);
@@ -62,7 +54,7 @@ const TabBar: React.FC<TabBarProps> = ({
                             handleDoubleClick(session.id, session.title);
                         }}
                     >
-                        <div className={`w-2 h-2 rounded-full mr-2 ${getStatusColor(session.status, session.id)}`} />
+                        <StatusDot status={session.status} isActive={activeSessionId === session.id} className="mr-2" />
                         {editingId === session.id ? (
                             <input
                                 autoFocus
