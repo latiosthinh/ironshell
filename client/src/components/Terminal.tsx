@@ -12,6 +12,8 @@ interface TerminalProps {
     config: ConnectionConfig;
     onDisconnect: () => void;
     sessionId: string;
+    isActive: boolean;
+    onDuplicate: () => void;
 }
 
 const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect, isActive, onDuplicate, sessionId }) => {
@@ -114,6 +116,14 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect, isActive, onD
             console.log('Requesting commands...');
             socket.emit('load-commands');
         });
+
+        // Check if already connected
+        if (socket.connected) {
+            setConnectionStatus('connected');
+            term.write('\r\n*** Connected to backend (Restored) ***\r\n');
+            socket.emit('ssh-connect', { ...config, cols: term.cols, rows: term.rows });
+            socket.emit('load-commands');
+        }
 
         socket.on('commands-loaded', (categories: Record<string, string[]>) => {
             console.log('Commands loaded:', categories);

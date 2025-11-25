@@ -18,6 +18,7 @@ class SocketService {
             reconnectionDelayMax: 5000,
             timeout: 10000,
             autoConnect: true,
+            transports: ['websocket', 'polling'],
         });
 
         this.isInitialized = true;
