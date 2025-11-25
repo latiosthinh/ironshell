@@ -1,0 +1,22 @@
+[
+  "ls",
+  "ls -la",
+  "cd",
+  "pwd",
+  "cp",
+  "mv",
+  "rm",
+  "rm -rf",
+  "mkdir",
+  "touch",
+  "cat",
+  "grep",
+  "echo",
+  "chmod",
+  "chown",
+  "ps aux",
+  "top",
+  "htop",
+  "df -h",
+  "free -m"
+]
