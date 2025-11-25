@@ -18,16 +18,19 @@ export interface Session {
 interface AppState {
     sessions: Session[];
     activeSessionId: string | null;
+    commandCategories: Record<string, string[]>;
     addSession: (session: Session) => void;
     removeSession: (id: string) => void;
     updateSessionStatus: (id: string, status: Session['status']) => void;
     updateSessionTitle: (id: string, title: string) => void;
+    setCommandCategories: (categories: Record<string, string[]>) => void;
     setActiveSessionId: (id: string | null) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
     sessions: [],
     activeSessionId: null,
+    commandCategories: { git: [], docker: [], shell: [], custom: [] },
     addSession: (session) => set((state) => ({
         sessions: [...state.sessions, session],
         activeSessionId: session.id
@@ -52,5 +55,6 @@ export const useStore = create<AppState>((set) => ({
             s.id === id ? { ...s, title } : s
         )
     })),
+    setCommandCategories: (categories) => set({ commandCategories: categories }),
     setActiveSessionId: (id) => set({ activeSessionId: id }),
 }));

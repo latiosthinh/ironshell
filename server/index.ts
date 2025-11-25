@@ -36,8 +36,76 @@ interface SSHConnectConfig {
   cols?: number;
 }
 
+import fs from 'fs';
+
+const COMMANDS_DIR = path.join(__dirname, 'commands');
+
+// Ensure commands directory and default files exist
+if (!fs.existsSync(COMMANDS_DIR)) {
+  fs.mkdirSync(COMMANDS_DIR);
+}
+
+const DEFAULT_COMMANDS = {
+  git: ['git status', 'git pull', 'git push', 'git commit -m ""', 'git add .', 'git checkout', 'git branch', 'git log', 'git diff', 'git clone'],
+  docker: ['docker ps', 'docker ps -a', 'docker images', 'docker build -t', 'docker run', 'docker-compose up -d', 'docker-compose down', 'docker logs -f'],
+  shell: ['ls', 'ls -la', 'cd', 'pwd', 'cp', 'mv', 'rm', 'rm -rf', 'mkdir', 'touch', 'cat', 'grep', 'echo', 'chmod', 'chown', 'ps aux', 'top', 'htop', 'df -h', 'free -m'],
+  custom: []
+};
+
+Object.entries(DEFAULT_COMMANDS).forEach(([category, commands]) => {
+  const filePath = path.join(COMMANDS_DIR, `${category}.json`);
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, JSON.stringify(commands, null, 2));
+  }
+});
+
 io.on('connection', (socket: Socket) => {
   console.log('Client connected', socket.id);
+
+  // Load commands
+  socket.on('load-commands', () => {
+    const categories: Record<string, string[]> = {};
+    try {
+      ['git', 'docker', 'shell', 'custom'].forEach(category => {
+        const filePath = path.join(COMMANDS_DIR, `${category}.json`);
+        if (fs.existsSync(filePath)) {
+          const content = fs.readFileSync(filePath, 'utf-8');
+          categories[category] = JSON.parse(content);
+        } else {
+          categories[category] = [];
+        }
+      });
+      socket.emit('commands-loaded', categories);
+    } catch (err) {
+      console.error('Error loading commands:', err);
+    }
+  });
+
+  // Save custom command
+  socket.on('save-command', (command: string) => {
+    if (!command || !command.trim()) return;
+
+    const customPath = path.join(COMMANDS_DIR, 'custom.json');
+    try {
+      let customCommands: string[] = [];
+      if (fs.existsSync(customPath)) {
+        customCommands = JSON.parse(fs.readFileSync(customPath, 'utf-8'));
+      }
+
+      if (!customCommands.includes(command)) {
+        customCommands.push(command);
+        fs.writeFileSync(customPath, JSON.stringify(customCommands, null, 2));
+
+        // Broadcast update to all clients (or just the sender, but broadcast is better for sync)
+        // For now, let's just emit back to sender to update their list, or we can rely on client optimistic update.
+        // Better to re-emit the updated custom list or just acknowledge.
+        // Let's re-emit the full categories or just custom?
+        // Simple approach: Client adds it locally, server saves it. Next load gets it.
+      }
+    } catch (err) {
+      console.error('Error saving command:', err);
+    }
+  });
 
   let sshClient = new Client();
 
