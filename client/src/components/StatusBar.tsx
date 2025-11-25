@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 interface StatusBarProps {
     host: string;
-    status: 'connected' | 'disconnected' | 'connecting';
+    status: 'connected' | 'disconnected' | 'connecting' | 'lost';
 }
 
 const StatusBar: React.FC<StatusBarProps> = ({ host, status }) => {
@@ -18,7 +18,9 @@ const StatusBar: React.FC<StatusBarProps> = ({ host, status }) => {
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                     <div className={`w-2 h-2 rounded-full ${status === 'connected' ? 'bg-[#50fa7b] shadow-[0_0_8px_#50fa7b]' :
-                            status === 'connecting' ? 'bg-[#f1fa8c] animate-pulse' : 'bg-[#ff5555]'
+                            status === 'connecting' ? 'bg-[#f1fa8c] animate-pulse' :
+                                status === 'lost' ? 'bg-[#ff5555]' :
+                                    'bg-[#6272a4]' // disconnected
                         }`} />
                     <span className={status === 'connected' ? 'text-[#f8f8f2]' : ''}>
                         {status.toUpperCase()}

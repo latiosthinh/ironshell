@@ -7,13 +7,10 @@
     --color-bg-color: #0f0f1a;
     --color-terminal-bg: #1e1e1e;
     --color-accent-color: #50fa7b;
-    /* Updated to green */
     --color-accent-hover: #69ff94;
-    /* Updated to lighter green */
     --color-text-color: #f0f0f0;
     --color-glass-bg: rgba(20, 20, 35, 0.6);
     --color-glass-border: rgba(80, 250, 123, 0.2);
-    /* Green tint border */
     --color-input-bg: rgba(0, 0, 0, 0.3);
     --color-error-color: #ff5555;
 
@@ -41,6 +38,22 @@
             opacity: 1;
         }
     }
+}
+
+@keyframes blinkYellowGreen {
+
+    0%,
+    100% {
+        background-color: #696969;
+    }
+
+    50% {
+        background-color: #fffb0d;
+    }
+}
+
+.animate-blink-yellow-green {
+    animation: blinkYellowGreen 1s infinite;
 }
 
 body {

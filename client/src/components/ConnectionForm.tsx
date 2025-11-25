@@ -5,6 +5,7 @@ interface ConnectionConfig {
     port: string;
     username: string;
     password?: string;
+    name?: string;
 }
 
 interface ConnectionFormProps {
@@ -86,6 +87,17 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="********"
+                        />
+                    </div>
+                    <div className="mb-5 relative group">
+                        <label className="block mb-2 text-[0.85rem] font-medium text-[#889] transition-colors duration-200 group-focus-within:text-accent-color">Session Name (Optional)</label>
+                        <input
+                            className="w-full px-4 py-[0.85rem] rounded-xl border border-glass-border bg-input-bg text-white font-sans text-[0.95rem] box-border transition-all duration-200 ease-in-out focus:outline-none focus:border-accent-color focus:bg-black/40 focus:shadow-[0_0_0_4px_rgba(100,108,255,0.1)] placeholder:text-white/20"
+                            type="text"
+                            name="name"
+                            value={formData.name || ''}
+                            onChange={handleChange}
+                            placeholder="My Server"
                         />
                     </div>
                     <button type="submit" className="w-full p-[0.9rem] mt-6 bg-gradient-to-br from-accent-color to-[#5058e5] text-white border-none rounded-xl text-base font-semibold cursor-pointer transition-all duration-200 shadow-[0_4px_12px_rgba(100,108,255,0.3)] hover:-translate-y-px hover:shadow-[0_6px_16px_rgba(100,108,255,0.4)] active:translate-y-px active:shadow-[0_2px_8px_rgba(100,108,255,0.3)] disabled:opacity-70 disabled:cursor-wait" disabled={isLoading}>
