@@ -33,9 +33,16 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect, isActive, onD
     }, [connectionStatus, sessionId, updateSessionStatus]);
 
     useEffect(() => {
-        // Initialize Socket.io
+        // Initialize Socket.io with reconnection limits
         const serverUrl = import.meta.env.PROD ? '/' : (import.meta.env.VITE_SERVER_URL || 'http://localhost:50000');
-        const socket = io(serverUrl);
+        const socket = io(serverUrl, {
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            timeout: 10000,
+            autoConnect: true,
+        });
         socketRef.current = socket;
 
         // Initialize xterm.js
@@ -123,6 +130,17 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect, isActive, onD
         });
 
         socket.on('disconnect', () => setConnectionStatus('lost'));
+
+        socket.on('connect_error', (error) => {
+            console.error('Socket connection error:', error);
+            setConnectionStatus('lost');
+        });
+
+        socket.on('reconnect_failed', () => {
+            console.error('Socket reconnection failed after maximum attempts');
+            setConnectionStatus('disconnected');
+            term.write('\r\n*** Failed to connect to server. Please check if the server is running. ***\r\n');
+        });
 
         socket.on('ssh-status', (status: string) => {
             if (status === 'connected') {
