@@ -25,6 +25,12 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
     const resizeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [connectionStatus, setConnectionStatus] = useState<'connected' | 'disconnected' | 'connecting'>('connecting');
 
+    const onDisconnectRef = useRef(onDisconnect);
+
+    useEffect(() => {
+        onDisconnectRef.current = onDisconnect;
+    }, [onDisconnect]);
+
     useEffect(() => {
         // Initialize Socket.io
         // Use relative path for single-port setup, fall back to env var for dev
@@ -171,7 +177,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
             } else if (status === 'disconnected') {
                 setConnectionStatus('disconnected');
                 term.write('\r\n*** SSH Connection Closed ***\r\n');
-                if (onDisconnect) onDisconnect();
+                if (onDisconnectRef.current) onDisconnectRef.current();
             }
         });
 
@@ -197,7 +203,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
             socket.disconnect();
             term.dispose();
         };
-    }, [config, onDisconnect]);
+    }, [config]);
 
     return (
         <>
