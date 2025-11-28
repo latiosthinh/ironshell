@@ -41,7 +41,14 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
     return (
         <div className="w-full h-full flex justify-center items-center perspective-[1000px]">
             <div className="bg-glass-bg backdrop-blur-[20px] border border-glass-border rounded-[24px] p-10 w-[380px] shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_0_1px_var(--color-glass-border)] animate-float-in relative overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-accent-color before:to-[#a855f7] before:opacity-80">
-                <h2 className="mt-0 text-center mb-8 font-bold text-2xl tracking-[-0.5px] bg-gradient-to-r from-white to-[#aaa] bg-clip-text text-transparent">IronShell</h2>
+                <div className="flex flex-col items-center mb-8">
+                    <img
+                        src="/ironshell.svg"
+                        alt="IronShell Logo"
+                        className="w-20 h-20 mb-4 drop-shadow-[0_0_30px_rgba(80,250,123,0.6)] animate-pulse-slow"
+                    />
+                    <h2 className="mt-0 text-center font-bold text-2xl tracking-[-0.5px] bg-gradient-to-r from-white to-[#aaa] bg-clip-text text-transparent">IronShell</h2>
+                </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-5 relative group">
                         <label className="block mb-2 text-[0.85rem] font-medium text-[#889] transition-colors duration-200 group-focus-within:text-accent-color">Host</label>

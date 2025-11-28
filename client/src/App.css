@@ -1,5 +1,33 @@
 @import "tailwindcss";
 
+@font-face {
+    font-family: 'MesloLGS NF';
+    src: url('https://cdn.jsdelivr.net/gh/romkatv/powerlevel10k-media/MesloLGS%20NF%20Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MesloLGS NF';
+    src: url('https://cdn.jsdelivr.net/gh/romkatv/powerlevel10k-media/MesloLGS%20NF%20Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'MesloLGS NF';
+    src: url('https://cdn.jsdelivr.net/gh/romkatv/powerlevel10k-media/MesloLGS%20NF%20Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'MesloLGS NF';
+    src: url('https://cdn.jsdelivr.net/gh/romkatv/powerlevel10k-media/MesloLGS%20NF%20Bold%20Italic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
 @theme {
     --font-sans: 'Inter', sans-serif;
     --font-mono: 'Fira Code', monospace;
@@ -16,6 +44,7 @@
 
     --animate-float-in: floatIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     --animate-fade-in: fadeIn 0.5s ease;
+    --animate-pulse-slow: pulseSlow 3s ease-in-out infinite;
 
     @keyframes floatIn {
         from {
@@ -38,22 +67,20 @@
             opacity: 1;
         }
     }
-}
 
-@keyframes blinkYellowGreen {
+    @keyframes pulseSlow {
 
-    0%,
-    100% {
-        background-color: #696969;
+        0%,
+        100% {
+            opacity: 1;
+            filter: drop-shadow(0 0 20px rgba(100, 108, 255, 0.3));
+        }
+
+        50% {
+            opacity: 0.8;
+            filter: drop-shadow(0 0 30px rgba(100, 108, 255, 0.5));
+        }
     }
-
-    50% {
-        background-color: #fffb0d;
-    }
-}
-
-.animate-blink-yellow-green {
-    animation: blinkYellowGreen 1s infinite;
 }
 
 body {

@@ -35,18 +35,18 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
         // Initialize xterm.js
         const term = new XTerm({
             cursorBlink: true,
-            fontFamily: '"Fira Code", monospace',
-            fontSize: 16, // Larger font for clarity
-            lineHeight: 1.2, // More breathing room
-            fontWeight: '500',
+            fontFamily: '"MesloLGS NF", "Fira Code", monospace',
+            fontSize: 14, // Slightly smaller for p10k density
+            lineHeight: 1.1, // Tighter line height for powerline glyphs
+            fontWeight: 'normal',
             theme: {
                 background: '#0f0f1a', // Matches app background
                 foreground: '#f8f8f2', // High contrast text
-                cursor: '#5af78e', // Bright green cursor (like robbyrussell success)
+                cursor: '#5af78e', // Bright green cursor
                 cursorAccent: '#282a36',
                 selectionBackground: 'rgba(90, 247, 142, 0.3)',
 
-                // Vibrant ANSI colors for zsh themes
+                // Vibrant ANSI colors
                 black: '#21222c',
                 red: '#ff5555',
                 green: '#50fa7b',

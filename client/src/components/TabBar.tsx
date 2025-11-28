@@ -17,10 +17,9 @@ const TabBar: React.FC<TabBarProps> = ({
     const [editValue, setEditValue] = React.useState('');
 
     const getStatusColor = (status: string, sessionId: string) => {
-        if (status === 'connected') {
+        if (["connected", "connecting"].includes(status)) {
             return activeSessionId === sessionId ? 'bg-[#50fa7b]' : 'bg-[#2e8b57]';
         }
-        if (status === 'connecting') return 'animate-blink-yellow-green';
         if (status === 'lost') return 'bg-[#ff5555]';
         return 'bg-[#6272a4]';
     };
