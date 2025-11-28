@@ -1,4 +1,7 @@
-# 🛡️ IronShell
+<div align="center">
+  <img src="client/public/ironshell.svg" alt="IronShell" width="120" />
+  <h1>IronShell</h1>
+</div>
 
 > A premium, web-based SSH terminal with ZSH aesthetics and Cloudflare Access support.
 

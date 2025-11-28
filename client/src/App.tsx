@@ -79,7 +79,7 @@ function App() {
           sessions.map(session => (
             <div
               key={session.id}
-              className={`absolute inset-0 ${activeSessionId === session.id ? 'z-0' : '-z-10 invisible'}`}
+              className={`absolute inset-0 flex flex-col ${activeSessionId === session.id ? 'z-0' : '-z-10 invisible'}`}
             >
               <Terminal
                 config={session.config}

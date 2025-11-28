@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { getStatusColor } from '../utils/statusUtils';
 
 interface StatusBarProps {
     host: string;
@@ -14,14 +15,10 @@ const StatusBar: React.FC<StatusBarProps> = ({ host, status }) => {
     }, []);
 
     return (
-        <div className="w-full h-8 bg-[#1e1e1e] border-t border-[#333] flex items-center justify-between px-4 text-xs font-mono text-[#6272a4] select-none">
+        <div data-test-id="status-bar" className="w-full h-8 bg-[#1e1e1e] border-t border-[#333] flex items-center justify-between px-4 text-xs font-mono text-[#6272a4] select-none">
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                    <div className={`w-2 h-2 rounded-full ${status === 'connected' ? 'bg-[#50fa7b] shadow-[0_0_8px_#50fa7b]' :
-                            status === 'connecting' ? 'bg-[#f1fa8c] animate-pulse' :
-                                status === 'lost' ? 'bg-[#ff5555]' :
-                                    'bg-[#6272a4]' // disconnected
-                        }`} />
+                    <div className={`w-2 h-2 rounded-full ${getStatusColor(status)}`} />
                     <span className={status === 'connected' ? 'text-[#f8f8f2]' : ''}>
                         {status.toUpperCase()}
                     </span>
