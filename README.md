@@ -12,6 +12,8 @@
 
 IronShell is a modern web terminal designed for those who love the look and feel of a customized ZSH shell but need the flexibility of a web client. It features a stunning glassmorphism UI, robust terminal emulation, and built-in support for connecting to servers behind Cloudflare Access.
 
+![IronShell Demo](client/public/demo.gif)
+
 ## ✨ Features
 
 - **🎨 Premium Aesthetics**: Dracula-inspired theme, Fira Code fonts, and glassmorphism UI.
