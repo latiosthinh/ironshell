@@ -107,7 +107,42 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
         setTimeout(() => {
             try {
                 fitAddon.fit();
-                term.write('Welcome to IronShell\r\n');
+                const logoLines = [
+                    '         ####                                                                                       ',
+                    '      ##### ####                                                                                    ',
+                    ' ##########    #####    ### ########  #######  #### ###  ######  ###  ### ######## ###     ###      ',
+                    ' ##########        #    ### ###  ### ###   ### ########  ####### ###  ### ###      ###     ###      ',
+                    ' ##########        #    ### ######## ###   ############   #####  ######## #######  ###     ###      ',
+                    ' ##########       ##    ### ### #### ###   ### ### ####  ### ### ###  ### ###      ###     ###      ',
+                    '  ######### ##### ##    ### ###  #### #######  ### ####   ###### ###  ### ######## ####### #######  ',
+                    '   ########      ##                                                                                 ',
+                    '    #######     ##                                                                                  ',
+                    '     ######  ####                                                                                   ',
+                    '       #######                                                                                      '
+                ];
+
+                const startColor = { r: 109, g: 236, b: 174 }; // #6decae
+                const endColor = { r: 129, g: 128, b: 255 };   // #8180ff
+                const maxLength = Math.max(...logoLines.map(line => line.length));
+
+                const coloredLogo = logoLines.map(line => {
+                    let coloredLine = '';
+                    for (let i = 0; i < line.length; i++) {
+                        const char = line[i];
+                        if (char === ' ') {
+                            coloredLine += char;
+                            continue;
+                        }
+                        const ratio = i / maxLength;
+                        const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
+                        const g = Math.round(startColor.g + (endColor.g - startColor.g) * ratio);
+                        const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
+                        coloredLine += `\x1b[38;2;${r};${g};${b}m${char}`;
+                    }
+                    return coloredLine + '\x1b[0m';
+                }).join('\r\n');
+
+                term.write(coloredLogo + '\r\n');
             } catch (e) {
                 console.warn('Initial fit error:', e);
             }
@@ -116,7 +151,7 @@ const Terminal: React.FC<TerminalProps> = ({ config, onDisconnect }) => {
         // Socket events
         socket.on('connect', () => {
             setConnectionStatus('connected');
-            term.write('\r\n*** Connected to backend ***\r\n');
+            term.write(`\r\n**************************** IRONSHELL v1.0.0 ****************************\r\n`);
             socket.emit('ssh-connect', {
                 ...config,
                 cols: term.cols,

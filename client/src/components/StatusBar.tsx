@@ -31,8 +31,15 @@ const StatusBar: React.FC<StatusBarProps> = ({ host, status }) => {
             </div>
 
             <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                    <span>IRONSHELL</span>
+                <div className="flex items-center gap-3">
+                    <div className='flex items-center gap-1'>
+                        <img
+                            src="/ironshell.svg"
+                            alt="IronShell Logo"
+                            className="w-auto h-5"
+                        />
+                        <span className='uppercase font-bold'>IronShell</span>
+                    </div>
                     <span className="text-[#bd93f9]">v1.0.0</span>
                 </div>
                 <div className="h-4 w-[1px] bg-[#444]" />

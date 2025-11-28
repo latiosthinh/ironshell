@@ -20,6 +20,7 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
         password: ''
     });
     const [isLoading, setIsLoading] = useState(false);
+    const [showAdvanced, setShowAdvanced] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
@@ -43,11 +44,10 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
             <div className="bg-glass-bg backdrop-blur-[20px] border border-glass-border rounded-[24px] p-10 w-[380px] shadow-[0_20px_50px_rgba(0,0,0,0.5),0_0_0_1px_var(--color-glass-border)] animate-float-in relative overflow-hidden before:content-[''] before:absolute before:top-0 before:left-0 before:right-0 before:h-1 before:bg-gradient-to-r before:from-accent-color before:to-[#a855f7] before:opacity-80">
                 <div className="flex flex-col items-center mb-8">
                     <img
-                        src="/ironshell.svg"
+                        src="/ironshell-full.svg"
                         alt="IronShell Logo"
-                        className="w-20 h-20 mb-4 drop-shadow-[0_0_30px_rgba(80,250,123,0.6)] animate-pulse-slow"
+                        className="w-full h-auto drop-shadow-[0_0_30px_rgba(80,250,123,0.6)] animate-pulse-slow px-4"
                     />
-                    <h2 className="mt-0 text-center font-bold text-2xl tracking-[-0.5px] bg-gradient-to-r from-white to-[#aaa] bg-clip-text text-transparent">IronShell</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-5 relative group">
@@ -60,17 +60,6 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
                             onChange={handleChange}
                             required
                             placeholder="example.com"
-                        />
-                    </div>
-                    <div className="mb-5 relative group">
-                        <label className="block mb-2 text-[0.85rem] font-medium text-[#889] transition-colors duration-200 group-focus-within:text-accent-color">Port</label>
-                        <input
-                            className="w-full px-4 py-[0.85rem] rounded-xl border border-glass-border bg-input-bg text-white font-sans text-[0.95rem] box-border transition-all duration-200 ease-in-out focus:outline-none focus:border-accent-color focus:bg-black/40 focus:shadow-[0_0_0_4px_rgba(100,108,255,0.1)] placeholder:text-white/20"
-                            type="number"
-                            name="port"
-                            value={formData.port}
-                            onChange={handleChange}
-                            required
                         />
                     </div>
                     <div className="mb-5 relative group">
@@ -96,17 +85,44 @@ const ConnectionForm: React.FC<ConnectionFormProps> = ({ onConnect }) => {
                             placeholder="********"
                         />
                     </div>
-                    <div className="mb-5 relative group">
-                        <label className="block mb-2 text-[0.85rem] font-medium text-[#889] transition-colors duration-200 group-focus-within:text-accent-color">Session Name (Optional)</label>
-                        <input
-                            className="w-full px-4 py-[0.85rem] rounded-xl border border-glass-border bg-input-bg text-white font-sans text-[0.95rem] box-border transition-all duration-200 ease-in-out focus:outline-none focus:border-accent-color focus:bg-black/40 focus:shadow-[0_0_0_4px_rgba(100,108,255,0.1)] placeholder:text-white/20"
-                            type="text"
-                            name="name"
-                            value={formData.name || ''}
-                            onChange={handleChange}
-                            placeholder="My Server"
-                        />
+
+                    <div className="mb-4">
+                        <button
+                            type="button"
+                            onClick={() => setShowAdvanced(!showAdvanced)}
+                            className="flex items-center text-sm text-[#889] hover:text-accent-color transition-colors duration-200 focus:outline-none cursor-pointer"
+                        >
+                            <span className="mr-2">{showAdvanced ? '▼' : '▶'}</span>
+                            Extra Options
+                        </button>
                     </div>
+
+                    {showAdvanced && (
+                        <div className="animate-fade-in-down">
+                            <div className="mb-5 relative group">
+                                <label className="block mb-2 text-[0.85rem] font-medium text-[#889] transition-colors duration-200 group-focus-within:text-accent-color">Port</label>
+                                <input
+                                    className="w-full px-4 py-[0.85rem] rounded-xl border border-glass-border bg-input-bg text-white font-sans text-[0.95rem] box-border transition-all duration-200 ease-in-out focus:outline-none focus:border-accent-color focus:bg-black/40 focus:shadow-[0_0_0_4px_rgba(100,108,255,0.1)] placeholder:text-white/20"
+                                    type="number"
+                                    name="port"
+                                    value={formData.port}
+                                    onChange={handleChange}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-5 relative group">
+                                <label className="block mb-2 text-[0.85rem] font-medium text-[#889] transition-colors duration-200 group-focus-within:text-accent-color">Session Name (Optional)</label>
+                                <input
+                                    className="w-full px-4 py-[0.85rem] rounded-xl border border-glass-border bg-input-bg text-white font-sans text-[0.95rem] box-border transition-all duration-200 ease-in-out focus:outline-none focus:border-accent-color focus:bg-black/40 focus:shadow-[0_0_0_4px_rgba(100,108,255,0.1)] placeholder:text-white/20"
+                                    type="text"
+                                    name="name"
+                                    value={formData.name || ''}
+                                    onChange={handleChange}
+                                    placeholder="My Server"
+                                />
+                            </div>
+                        </div>
+                    )}
                     <button type="submit" className="w-full p-[0.9rem] mt-6 bg-gradient-to-br from-accent-color to-[#5058e5] text-white border-none rounded-xl text-base font-semibold cursor-pointer transition-all duration-200 shadow-[0_4px_12px_rgba(100,108,255,0.3)] hover:-translate-y-px hover:shadow-[0_6px_16px_rgba(100,108,255,0.4)] active:translate-y-px active:shadow-[0_2px_8px_rgba(100,108,255,0.3)] disabled:opacity-70 disabled:cursor-wait" disabled={isLoading}>
                         {isLoading ? 'Connecting...' : 'Connect'}
                     </button>
